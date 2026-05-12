@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ミョウホウ・クエスト</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      min-height: 100%;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif;
+      background: #d8f3dc;
+      color: #1f2933;
+      overflow-x: hidden;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+    }
+
+    #app {
+      width: 100%;
+      max-width: 430px;
+      min-height: 100vh;
+      background: linear-gradient(#bde0fe, #fefae0 55%, #b7e4c7);
+      border-left: 4px solid #1d3557;
+      border-right: 4px solid #1d3557;
+      overflow-x: hidden;
+    }
+
+    .screen {
+      min-height: 100vh;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .box {
+      background: rgba(255,255,255,0.94);
+      border: 3px solid #1d3557;
+      border-radius: 14px;
+      padding: 14px;
+      box-shadow: 0 4px 0 rgba(29,53,87,0.25);
+    }
+
+    .title-box {
+      margin-top: 38px;
+      text-align: center;
+      background: #fff8d6;
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: 29px;
+      letter-spacing: 1px;
+      color: #1d3557;
+    }
+
+    h2 {
+      margin: 0 0 8px;
+      font-size: 21px;
+      color: #1d3557;
+    }
+
+    h3 {
+      margin: 0 0 6px;
+      font-size: 17px;
+    }
+
+    p {
+      margin: 7px 0;
+      line-height: 1.55;
+    }
+
+    .small {
+      font-size: 13px;
+      color: #52616b;
+      line-height: 1.45;
+    }
+
+    .btn-area {
+      margin-top: auto;
+      display: grid;
+      gap: 9px;
+    }
+
+    button {
+      width: 100%;
+      min-height: 48px;
+      padding: 10px 12px;
+      border: 3px solid #1d3557;
+      border-radius: 12px;
+      background: #fff3b0;
+      color: #1f2933;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 3px 0 #588157;
+      touch-action: manipulation;
+    }
+
+    button:active {
+      transform: translateY(2px);
+      box-shadow: 0 1px 0 #588157;
+    }
+
+    button:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+
+    .sub {
+      background: #e3f2fd;
+    }
+
+    .danger {
+      background: #ffe0e0;
+    }
+
+    .area-button {
+      text-align: left;
+      background: #ffffff;
+    }
+
+    .clear {
+      background: #d8f3dc;
+    }
+
+    .battle-field {
+      background: linear-gradient(#90dbf4 0 48%, #b7e4c7 49% 100%);
+      border: 3px solid #1d3557;
+      border-radius: 14px;
+      padding: 12px;
+      min-height: 245px;
+      position: relative;
+    }
+
+    .status {
+      background: #ffffff;
+      border: 2px solid #1d3557;
+      border-radius: 10px;
+      padding: 8px;
+      font-size: 13px;
+    }
+
+    .enemy-status {
+      width: 58%;
+      margin-bottom: 18px;
+    }
+
+    .player-status {
+      width: 58%;
+      margin-left: auto;
+      margin-top: 16px;
+    }
+
+    .monster {
+      width: 92px;
+      height: 92px;
+      border: 3px solid #1d3557;
+      border-radius: 18px;
+      background: #f77f00;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 46px;
+      margin-left: auto;
+      margin-right: 22px;
+      box-shadow: inset -7px -7px 0 rgba(0,0,0,0.12);
+    }
+
+    .buddy {
+      width: 90px;
+      height: 90px;
+      border: 3px solid #1d3557;
+      border-radius: 50%;
+      background: #95d5b2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 42px;
+      margin-left: 24px;
+      box-shadow: inset -7px -7px 0 rgba(0,0,0,0.12);
+    }
+
+    .hp-wrap {
+      height: 15px;
+      border: 2px solid #1d3557;
+      border-radius: 999px;
+      background: #e5e5e5;
+      overflow: hidden;
+      margin-top: 5px;
+    }
+
+    .hp {
+      height: 100%;
+      width: 100%;
+      background: linear-gradient(90deg, #52b788, #d9ed92);
+      transition: width 0.2s;
+    }
+
+    .question-box {
+      background: #ffffff;
+      border: 3px solid #1d3557;
+      border-radius: 14px;
+      padding: 12px;
+    }
+
+    .question {
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .choices {
+      display: grid;
+      gap: 8px;
+    }
+
+    .choice {
+      background: #ffffff;
+      text-align: left;
+      font-size: 15px;
+    }
+
+    .choice.correct {
+      background: #caffbf;
+    }
+
+    .choice.wrong {
+      background: #ffccd5;
+    }
+
+    .message {
+      background: #fff8d6;
+      border: 3px solid #1d3557;
+      border-radius: 14px;
+      padding: 12px;
+      line-height: 1.55;
+    }
+
+    .tag {
+      display: inline-block;
+      border: 2px solid #1d3557;
+      border-radius: 999px;
+      background: #fff8d6;
+      padding: 3px 8px;
+      margin: 2px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .top button {
+      width: auto;
+      min-height: 36px;
+      padding: 5px 10px;
+      font-size: 12px;
+      border-width: 2px;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app"></div>
+
+  <script>
+    const SAVE_KEY = "myoho_quest_simple_save_v1";
+
+    const areas = [
+      { id: "nichiren", name: "ニチレンの森", boss: "ムチシキバット", mark: "🦇", hp: 60 },
+      { id: "shingyo", name: "シンギョウの道場", boss: "ナンデモニゲル", mark: "💧", hp: 60 },
+      { id: "seimei", name: "セイメイの湖", boss: "ココロユラシ", mark: "👻", hp: 70 },
+      { id: "jiyu", name: "ジユウの大地", boss: "ワスレノオニ", mark: "👹", hp: 70 },
+      { id: "sekai", name: "セカイコウフの港", boss: "ゴーマンロード", mark: "🚢", hp: 80 },
+      { id: "soka", name: "ソウカの記念館", boss: "レキシワスレ", mark: "📘", hp: 80 },
+      { id: "tower", name: "マヨイの塔", boss: "まおうマヨイ", mark: "👑", hp: 120, final: true }
+    ];
+
+    const questions = [
+      {
+        id: 1,
+        area: "nichiren",
+        question: "日蓮大聖人が誕生された年はいつですか？",
+        choices: ["1222年", "1253年", "1271年", "1282年"],
+        answer: 0,
+        explanation: "日蓮大聖人は1222年、安房国に誕生されました。御生涯を学ぶうえで基本となる年号です。"
+      },
+      {
+        id: 2,
+        area: "nichiren",
+        question: "日蓮大聖人が立宗宣言をされた年はいつですか？",
+        choices: ["1222年", "1253年", "1260年", "1279年"],
+        answer: 1,
+        explanation: "1253年、日蓮大聖人は南無妙法蓮華経を唱え、立宗宣言をされました。"
+      },
+      {
+        id: 3,
+        area: "nichiren",
+        question: "『立正安国論』の中心的な願いとして近いものはどれですか？",
+        choices: ["社会の安穏と人々の幸福", "自分だけの利益", "争いを広げること", "学問をやめること"],
+        answer: 0,
+        explanation: "『立正安国論』は、正しい法を根本に社会の安穏と人々の幸福を願う書です。"
+      },
+      {
+        id: 4,
+        area: "nichiren",
+        question: "竜の口の法難が起きた年はいつですか？",
+        choices: ["1260年", "1271年", "1274年", "1282年"],
+        answer: 1,
+        explanation: "竜の口の法難は1271年に起きました。大聖人の御生涯の重要な転機です。"
+      },
+      {
+        id: 5,
+        area: "nichiren",
+        question: "三大秘法に含まれるものはどれですか？",
+        choices: ["本門の本尊・本門の題目・本門の戒壇", "文証・理証・現証", "信・行・学", "地獄・餓鬼・畜生"],
+        answer: 0,
+        explanation: "三大秘法は、本門の本尊・本門の題目・本門の戒壇を指します。"
+      },
+
+      {
+        id: 6,
+        area: "shingyo",
+        question: "三証とは何ですか？",
+        choices: ["文証・理証・現証", "信・行・学", "身・口・意", "春・夏・秋"],
+        answer: 0,
+        explanation: "三証とは、文証・理証・現証のことです。教えの正しさを確かめる大切な視点です。"
+      },
+      {
+        id: 7,
+        area: "shingyo",
+        question: "信行学の説明として正しいものはどれですか？",
+        choices: ["信じ、実践し、学ぶこと", "知識だけを集めること", "人と関わらないこと", "結果を気にしないこと"],
+        answer: 0,
+        explanation: "信行学は、信じる心、実践、学びを一体で進めることです。"
+      },
+      {
+        id: 8,
+        area: "shingyo",
+        question: "自行化他の説明として近いものはどれですか？",
+        choices: ["自分も実践し、人にも仏法を語ること", "自分だけ満足すること", "他人にすべて任せること", "何も行動しないこと"],
+        answer: 0,
+        explanation: "自行化他とは、自分の実践と、他者を励ます実践の両方を大切にすることです。"
+      },
+      {
+        id: 9,
+        area: "shingyo",
+        question: "三障四魔とは何を表しますか？",
+        choices: ["成長や信心を妨げる働き", "必ず避けるべき学問", "地名の名前", "昔の遊び"],
+        answer: 0,
+        explanation: "三障四魔は、信心や成長を妨げる働きを表します。乗り越えることで強くなれます。"
+      },
+      {
+        id: 10,
+        area: "shingyo",
+        question: "異体同心の意味として近いものはどれですか？",
+        choices: ["違いを持つ人々が心を合わせること", "全員が同じ姿になること", "一人で全部行うこと", "意見を言わないこと"],
+        answer: 0,
+        explanation: "異体同心とは、個性や立場は違っても、同じ目的へ心を合わせて進むことです。"
+      },
+
+      {
+        id: 11,
+        area: "seimei",
+        question: "十界とは何を表す教えですか？",
+        choices: ["生命の十種の境涯", "十個の建物", "十人の弟子", "十種類の文字"],
+        answer: 0,
+        explanation: "十界は、生命にそなわる十種の境涯を示す教えです。"
+      },
+      {
+        id: 12,
+        area: "seimei",
+        question: "六道に含まれないものはどれですか？",
+        choices: ["地獄界", "餓鬼界", "畜生界", "仏界"],
+        answer: 3,
+        explanation: "六道は地獄・餓鬼・畜生・修羅・人・天です。仏界は四聖に含まれます。"
+      },
+      {
+        id: 13,
+        area: "seimei",
+        question: "四聖に含まれるものはどれですか？",
+        choices: ["声聞・縁覚・菩薩・仏", "地獄・餓鬼・畜生・修羅", "東・西・南・北", "春・夏・秋・冬"],
+        answer: 0,
+        explanation: "四聖は、声聞・縁覚・菩薩・仏の四つです。"
+      },
+      {
+        id: 14,
+        area: "seimei",
+        question: "十界互具の説明として正しいものはどれですか？",
+        choices: ["一つの境涯にも他の境涯がそなわる", "境涯は固定される", "仏界は誰にもない", "十界は数字だけの教え"],
+        answer: 0,
+        explanation: "十界互具は、一つの境涯の中にも他の境涯がそなわるという教えです。"
+      },
+      {
+        id: 15,
+        area: "seimei",
+        question: "依正不二の基礎理解として近いものはどれですか？",
+        choices: ["自分と環境は深く関わり合う", "環境は自分と無関係", "場所だけが大切", "自然を見ないこと"],
+        answer: 0,
+        explanation: "依正不二は、生命と環境が切り離せない関係にあるという考え方です。"
+      },
+
+      {
+        id: 16,
+        area: "jiyu",
+        question: "地涌の菩薩の説明として近いものはどれですか？",
+        choices: ["人々を救う使命を持つ菩薩", "地面だけを守る存在", "過去にしかいない人", "修行を嫌う人"],
+        answer: 0,
+        explanation: "地涌の菩薩は、末法の時代に妙法を弘め、人々を励ます使命を持つ存在です。"
+      },
+      {
+        id: 17,
+        area: "jiyu",
+        question: "地涌の菩薩が説かれる法華経の品として正しいものはどれですか？",
+        choices: ["従地涌出品", "方便品", "薬草喩品", "安楽行品"],
+        answer: 0,
+        explanation: "地涌の菩薩は、法華経の従地涌出品で説かれます。"
+      },
+      {
+        id: 18,
+        area: "jiyu",
+        question: "御書根本の姿勢として近いものはどれですか？",
+        choices: ["御書を根本に学び実践する", "気分だけで決める", "学びを避ける", "人を責める"],
+        answer: 0,
+        explanation: "御書根本とは、日蓮大聖人の御書を根本として学び、実践に生かす姿勢です。"
+      },
+      {
+        id: 19,
+        area: "jiyu",
+        question: "善知識とはどのような存在ですか？",
+        choices: ["成長を助けるよき縁や人", "必ず避ける人", "敵だけを指す言葉", "忘れ物の名前"],
+        answer: 0,
+        explanation: "善知識は、仏道修行や成長を助けてくれるよき縁や人を指します。"
+      },
+      {
+        id: 20,
+        area: "jiyu",
+        question: "色心不二の説明として近いものはどれですか？",
+        choices: ["身体と心は深く結びついている", "心と身体は無関係", "身体だけが大切", "心だけ見ればよい"],
+        answer: 0,
+        explanation: "色心不二は、身体と心が別々ではなく深く関係しているという考え方です。"
+      },
+
+      {
+        id: 21,
+        area: "sekai",
+        question: "広宣流布の説明として近いものはどれですか？",
+        choices: ["平和と幸福のために妙法を広めること", "自分だけ得をすること", "争いを広げること", "歴史を忘れること"],
+        answer: 0,
+        explanation: "広宣流布とは、妙法を根本に人々の幸福と社会の平和を広げていく実践です。"
+      },
+      {
+        id: 22,
+        area: "sekai",
+        question: "創価学会の初代会長は誰ですか？",
+        choices: ["牧口常三郎先生", "戸田城聖先生", "池田大作先生", "日蓮大聖人"],
+        answer: 0,
+        explanation: "創価学会の初代会長は牧口常三郎先生です。"
+      },
+      {
+        id: 23,
+        area: "sekai",
+        question: "人間革命の説明として近いものはどれですか？",
+        choices: ["一人の内面の変革が周囲や社会を変える", "他人だけを変えること", "努力をやめること", "昔の出来事だけを覚えること"],
+        answer: 0,
+        explanation: "人間革命とは、一人の内面の変革が周囲や社会の変革につながるという考え方です。"
+      },
+      {
+        id: 24,
+        area: "sekai",
+        question: "世界広布の理解として近いものはどれですか？",
+        choices: ["国境を越えて平和と幸福の連帯を広げる", "海外へ行くだけのこと", "一つの国だけで完結する", "文化交流を否定する"],
+        answer: 0,
+        explanation: "世界広布は、国や文化の違いを超えて平和と幸福の連帯を広げる取り組みです。"
+      },
+      {
+        id: 25,
+        area: "sekai",
+        question: "仏教の人間主義として近い考えはどれですか？",
+        choices: ["一人一人の生命を尊重する", "人を見下す", "権威だけを重んじる", "対話を避ける"],
+        answer: 0,
+        explanation: "仏教の人間主義は、一人一人の生命を尊重し、幸福を願う考え方です。"
+      },
+
+      {
+        id: 26,
+        area: "soka",
+        question: "創価学会が創立された日はいつですか？",
+        choices: ["1930年11月18日", "1945年7月3日", "1951年5月3日", "1975年1月26日"],
+        answer: 0,
+        explanation: "創価学会は1930年11月18日に創立されました。"
+      },
+      {
+        id: 27,
+        area: "soka",
+        question: "戸田城聖先生が第2代会長に就任された日はいつですか？",
+        choices: ["1951年5月3日", "1957年9月8日", "1960年5月3日", "1975年1月26日"],
+        answer: 0,
+        explanation: "戸田城聖先生は1951年5月3日に第2代会長に就任されました。"
+      },
+      {
+        id: 28,
+        area: "soka",
+        question: "牧口先生と戸田先生が逮捕された日はいつですか？",
+        choices: ["1943年7月6日", "1944年11月18日", "1945年7月3日", "1930年11月18日"],
+        answer: 0,
+        explanation: "1943年7月6日、牧口先生と戸田先生は軍部政府の弾圧により逮捕されました。"
+      },
+      {
+        id: 29,
+        area: "soka",
+        question: "牧口常三郎先生が殉教された日はいつですか？",
+        choices: ["1944年11月18日", "1945年7月3日", "1951年5月3日", "1960年5月3日"],
+        answer: 0,
+        explanation: "牧口先生は1944年11月18日、獄中で逝去されました。"
+      },
+      {
+        id: 30,
+        area: "soka",
+        question: "SGIが発足した日はいつですか？",
+        choices: ["1975年1月26日", "1960年5月3日", "1957年9月8日", "1930年11月18日"],
+        answer: 0,
+        explanation: "SGIは1975年1月26日に発足しました。世界広布の大きな節目です。"
+      },
+
+      {
+        id: 31,
+        area: "tower",
+        question: "三証のうち、実際の結果や体験によって確かめるものはどれですか？",
+        choices: ["文証", "理証", "現証", "空証"],
+        answer: 2,
+        explanation: "現証は、実際の結果や体験によって教えの正しさを確かめるものです。"
+      },
+      {
+        id: 32,
+        area: "tower",
+        question: "南無妙法蓮華経についての理解として近いものはどれですか？",
+        choices: ["日蓮仏法の根本となる題目", "単なるあいさつ", "歴史上の都市名", "修行と無関係な言葉"],
+        answer: 0,
+        explanation: "南無妙法蓮華経は、日蓮仏法の根本となる題目です。"
+      },
+      {
+        id: 33,
+        area: "tower",
+        question: "変毒為薬の説明として近いものはどれですか？",
+        choices: ["苦しみを価値ある成長へ変える", "毒をそのまま飲む", "失敗を隠す", "努力を否定する"],
+        answer: 0,
+        explanation: "変毒為薬とは、苦難や悩みを価値ある成長や使命へ変えていく考え方です。"
+      },
+      {
+        id: 34,
+        area: "tower",
+        question: "十界互具が示す希望として近いものはどれですか？",
+        choices: ["どんな境涯にも仏界がそなわる", "人は変われない", "境涯は一つに固定される", "学ぶ意味はない"],
+        answer: 0,
+        explanation: "十界互具は、どんな生命にも仏界がそなわることを示します。"
+      },
+      {
+        id: 35,
+        area: "tower",
+        question: "1957年9月8日に戸田先生が発表されたものは何ですか？",
+        choices: ["原水爆禁止宣言", "立宗宣言", "SGI発足宣言", "創価学会創立宣言"],
+        answer: 0,
+        explanation: "戸田先生は1957年9月8日、原水爆禁止宣言を発表されました。"
+      },
+      {
+        id: 36,
+        area: "tower",
+        question: "池田大作先生が第3代会長に就任された日はいつですか？",
+        choices: ["1960年5月3日", "1951年5月3日", "1975年1月26日", "1945年7月3日"],
+        answer: 0,
+        explanation: "池田大作先生は1960年5月3日に第3代会長に就任されました。"
+      },
+      {
+        id: 37,
+        area: "tower",
+        question: "広宣流布の身近な実践として近いものはどれですか？",
+        choices: ["友人を励まし、幸福を願って対話する", "相手を見下す", "学びを独占する", "人との関わりを断つ"],
+        answer: 0,
+        explanation: "広宣流布は、身近な人を励まし、幸福を願って対話することから始まります。"
+      },
+      {
+        id: 38,
+        area: "tower",
+        question: "依正不二を生活に生かす考え方として近いものはどれですか？",
+        choices: ["自分の変革が環境にもよい影響を与える", "環境は絶対に変わらない", "周囲だけを責める", "自分の行動は無意味"],
+        answer: 0,
+        explanation: "依正不二は、自分と環境が深く結びつくことを示します。"
+      },
+      {
+        id: 39,
+        area: "tower",
+        question: "信行学の関係として適切なものはどれですか？",
+        choices: ["信・行・学を一体で進める", "学だけで実践しない", "行だけで学ばない", "信心と生活は無関係"],
+        answer: 0,
+        explanation: "信行学は、信じる心、実践、学びを一体で進めることが大切です。"
+      },
+      {
+        id: 40,
+        area: "tower",
+        question: "宿命転換の理解として近いものはどれですか？",
+        choices: ["苦難を成長と使命に変えること", "過去を嘆き続けること", "何もしないこと", "人のせいにすること"],
+        answer: 0,
+        explanation: "宿命転換とは、苦しみや課題を乗り越え、成長と使命へ変えていく考え方です。"
+      }
+    ];
+
+    let state = {
+      clearedAreas: [],
+      totalAnswers: 0,
+      totalCorrect: 0,
+      wrongQuestionIds: []
+    };
+
+    let battle = null;
+
+    const app = document.getElementById("app");
+
+    function saveGame() {
+      localStorage.setItem(SAVE_KEY, JSON.stringify(state));
+    }
+
+    function loadGame() {
+      const data = localStorage.getItem(SAVE_KEY);
+      if (data) {
+        try {
+          const loaded = JSON.parse(data);
+          state.clearedAreas = Array.isArray(loaded.clearedAreas) ? loaded.clearedAreas : [];
+          state.totalAnswers = Number(loaded.totalAnswers) || 0;
+          state.totalCorrect = Number(loaded.totalCorrect) || 0;
+          state.wrongQuestionIds = Array.isArray(loaded.wrongQuestionIds) ? loaded.wrongQuestionIds : [];
+        } catch (e) {
+          state = {
+            clearedAreas: [],
+            totalAnswers: 0,
+            totalCorrect: 0,
+            wrongQuestionIds: []
+          };
+        }
+      }
+    }
+
+    function resetGame() {
+      if (confirm("保存データを消して、はじめから遊びますか？")) {
+        localStorage.removeItem(SAVE_KEY);
+        state = {
+          clearedAreas: [],
+          totalAnswers: 0,
+          totalCorrect: 0,
+          wrongQuestionIds: []
+        };
+        saveGame();
+        showAreaSelect();
+      }
+    }
+
+    function showTitle() {
+      loadGame();
+
+      app.innerHTML = `
+        <div class="screen">
+          <div class="box title-box">
+            <h1>ミョウホウ・クエスト</h1>
+            <p><strong>クローバードと希望の教学バトル</strong></p>
+            <p class="small">スマホ向け・教学クイズRPG</p>
+          </div>
+
+          <div class="box">
+            <p>相棒のクローバードと一緒に、まよいモンスターとクイズバトル！</p>
+            <p>正解すると敵に20ダメージ。不正解だと自分に15ダメージです。</p>
+          </div>
+
+          <div class="btn-area">
+            <button onclick="showAreaSelect()">つづきから / はじめる</button>
+            <button class="sub" onclick="showStats()">成績を見る</button>
+            <button class="danger" onclick="resetGame()">はじめから</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function showAreaSelect() {
+      loadGame();
+
+      const normalAreas = areas.filter(a => !a.final);
+      const finalUnlocked = normalAreas.every(a => state.clearedAreas.includes(a.id));
+
+      let html = `
+        <div class="screen">
+          <div class="top">
+            <strong>エリア選択</strong>
+            <button onclick="showTitle()">タイトル</button>
+          </div>
+
+          <div class="box">
+            <h2>冒険するエリアを選んでください</h2>
+            <p class="small">6つのエリアをすべてクリアすると、マヨイの塔が解放されます。</p>
+          </div>
+      `;
+
+      areas.forEach(area => {
+        const cleared = state.clearedAreas.includes(area.id);
+        const locked = area.final && !finalUnlocked;
+
+        html += `
+          <button
+            class="area-button ${cleared ? "clear" : ""}"
+            ${locked ? "disabled" : ""}
+            onclick="startBattle('${area.id}')"
+          >
+            ${cleared ? "✅ " : ""}${area.name}<br>
+            <span class="small">
+              ボス：${area.boss}${locked ? " / まだ解放されていません" : ""}
+            </span>
+          </button>
+        `;
+      });
+
+      html += `
+          <div class="btn-area">
+            <button class="sub" onclick="showStats()">成績を見る</button>
+          </div>
+        </div>
+      `;
+
+      app.innerHTML = html;
+    }
+
+    function startBattle(areaId) {
+      const area = areas.find(a => a.id === areaId);
+      const areaQuestions = questions.filter(q => q.area === areaId);
+
+      battle = {
+        area: area,
+        playerHp: 100,
+        enemyHp: area.hp,
+        questions: shuffleArray(areaQuestions),
+        index: 0,
+        currentQuestion: null,
+        answered: false,
+        selected: null,
+        message: "バトル開始！ 問題に答えましょう。"
+      };
+
+      nextQuestion();
+    }
+
+    function nextQuestion() {
+      if (!battle) return;
+
+      if (battle.enemyHp <= 0) {
+        showVictory();
+        return;
+      }
+
+      if (battle.playerHp <= 0) {
+        showDefeat();
+        return;
+      }
+
+      if (battle.index >= battle.questions.length) {
+        battle.questions = shuffleArray(battle.questions);
+        battle.index = 0;
+      }
+
+      battle.currentQuestion = battle.questions[battle.index];
+      battle.index++;
+      battle.answered = false;
+      battle.selected = null;
+      battle.message = "クローバード「落ち着いて選びましょう。」";
+
+      renderBattle();
+    }
+
+    function renderBattle() {
+      const q = battle.currentQuestion;
+      const enemyPercent = Math.max(0, Math.round((battle.enemyHp / battle.area.hp) * 100));
+      const playerPercent = Math.max(0, Math.round((battle.playerHp / 100) * 100));
+
+      let choicesHtml = "";
+      q.choices.forEach((choice, index) => {
+        let cls = "choice";
+
+        if (battle.answered) {
+          if (index === q.answer) {
+            cls += " correct";
+          } else if (index === battle.selected) {
+            cls += " wrong";
+          }
+        }
+
+        choicesHtml += `
+          <button
+            class="${cls}"
+            ${battle.answered ? "disabled" : ""}
+            onclick="answerQuestion(${index})"
+          >
+            ${choice}
+          </button>
+        `;
+      });
+
+      app.innerHTML = `
+        <div class="screen">
+          <div class="top">
+            <strong>${battle.area.name}</strong>
+            <button onclick="showAreaSelect()">にげる</button>
+          </div>
+
+          <div class="battle-field">
+            <div class="status enemy-status">
+              <strong>${battle.area.boss}</strong>
+              <div class="hp-wrap">
+                <div class="hp" style="width:${enemyPercent}%"></div>
+              </div>
+              <span class="small">HP ${battle.enemyHp} / ${battle.area.hp}</span>
+            </div>
+
+            <div class="monster">${battle.area.mark}</div>
+
+            <div class="buddy">🍀</div>
+
+            <div class="status player-status">
+              <strong>クローバード</strong>
+              <div class="hp-wrap">
+                <div class="hp" style="width:${playerPercent}%"></div>
+              </div>
+              <span class="small">HP ${battle.playerHp} / 100</span>
+            </div>
+          </div>
+
+          <div class="question-box">
+            <span class="tag">第${battle.index}問</span>
+            <p class="question">${q.question}</p>
+          </div>
+
+          <div class="choices">
+            ${choicesHtml}
+          </div>
+
+          <div class="message">
+            ${battle.message}
+          </div>
+
+          <div class="btn-area">
+            ${battle.answered ? `<button onclick="nextQuestion()">次へ</button>` : ""}
+          </div>
+        </div>
+      `;
+    }
+
+    function answerQuestion(choiceIndex) {
+      if (!battle || battle.answered) return;
+
+      const q = battle.currentQuestion;
+      const correct = choiceIndex === q.answer;
+
+      battle.answered = true;
+      battle.selected = choiceIndex;
+
+      state.totalAnswers++;
+
+      if (correct) {
+        state.totalCorrect++;
+        battle.enemyHp -= 20;
+        if (battle.enemyHp < 0) battle.enemyHp = 0;
+
+        removeWrongQuestion(q.id);
+
+        battle.message = `
+          <strong>正解！</strong><br>
+          ${battle.area.boss}に20ダメージ！<br>
+          <span class="small">${q.explanation}</span>
+        `;
+      } else {
+        battle.playerHp -= 15;
+        if (battle.playerHp < 0) battle.playerHp = 0;
+
+        addWrongQuestion(q.id);
+
+        battle.message = `
+          <strong>不正解…！</strong><br>
+          正解は「${q.choices[q.answer]}」です。<br>
+          クローバードは15ダメージを受けました。<br>
+          <span class="small">${q.explanation}</span>
+        `;
+      }
+
+      saveGame();
+      renderBattle();
+    }
+
+    function showVictory() {
+      if (!state.clearedAreas.includes(battle.area.id)) {
+        state.clearedAreas.push(battle.area.id);
+      }
+
+      saveGame();
+
+      const isFinal = battle.area.id === "tower";
+
+      app.innerHTML = `
+        <div class="screen">
+          <div class="box title-box">
+            <h1>${isFinal ? "完全クリア！" : "勝利！"}</h1>
+            <p><strong>${battle.area.boss}を倒しました！</strong></p>
+          </div>
+
+          <div class="box">
+            <p>クローバード「すごいです…！ また一つ、教学の力が増えましたね。」</p>
+            ${isFinal ? "<p>まおうマヨイを倒し、希望の教学バトルを制しました！</p>" : ""}
+          </div>
+
+          <div class="btn-area">
+            <button onclick="showAreaSelect()">エリア選択へ</button>
+            <button class="sub" onclick="showStats()">成績を見る</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function showDefeat() {
+      app.innerHTML = `
+        <div class="screen">
+          <div class="box title-box">
+            <h1>敗北…</h1>
+            <p><strong>クローバードは力尽きました</strong></p>
+          </div>
+
+          <div class="box">
+            <p>クローバード「えっと…大丈夫です。間違えたところを覚え直せば、きっと前に進めます。」</p>
+          </div>
+
+          <div class="btn-area">
+            <button onclick="startBattle('${battle.area.id}')">もう一度挑戦</button>
+            <button class="sub" onclick="showAreaSelect()">エリア選択へ</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function showStats() {
+      loadGame();
+
+      const rate = state.totalAnswers === 0
+        ? 0
+        : Math.round((state.totalCorrect / state.totalAnswers) * 100);
+
+      const clearedNames = state.clearedAreas
+        .map(id => {
+          const area = areas.find(a => a.id === id);
+          return area ? area.name : "";
+        })
+        .filter(Boolean);
+
+      app.innerHTML = `
+        <div class="screen">
+          <div class="top">
+            <strong>成績</strong>
+            <button onclick="showTitle()">タイトル</button>
+          </div>
+
+          <div class="box">
+            <h2>冒険の記録</h2>
+            <p>総回答数：${state.totalAnswers}</p>
+            <p>総正解数：${state.totalCorrect}</p>
+            <p>正答率：${rate}%</p>
+            <p>間違えた問題数：${state.wrongQuestionIds.length}</p>
+          </div>
+
+          <div class="box">
+            <h3>クリア済みエリア</h3>
+            <p>${clearedNames.length ? clearedNames.join("、") : "まだありません"}</p>
+          </div>
+
+          <div class="btn-area">
+            <button onclick="showAreaSelect()">エリア選択へ</button>
+            <button class="danger" onclick="resetGame()">保存データを消す</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function addWrongQuestion(id) {
+      if (!state.wrongQuestionIds.includes(id)) {
+        state.wrongQuestionIds.push(id);
+      }
+    }
+
+    function removeWrongQuestion(id) {
+      state.wrongQuestionIds = state.wrongQuestionIds.filter(wid => wid !== id);
+    }
+
+    function shuffleArray(array) {
+      const copied = array.slice();
+      for (let i = copied.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        const temp = copied[i];
+        copied[i] = copied[j];
+        copied[j] = temp;
+      }
+      return copied;
+    }
+
+    showTitle();
+  </script>
+</body>
+</html>
